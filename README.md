@@ -26,6 +26,83 @@ Windows 11
 
 WSL Ubuntu 上で Docker Engine / Compose Plugin を導入。
 
+## Docker Installation (WSL2 Ubuntu)
+
+Docker Engine / Docker Compose Plugin を Ubuntu(WSL2) に導入。
+
+### Install Docker Repository
+
+```bash
+sudo apt update && sudo apt upgrade -y
+
+sudo apt install -y ca-certificates curl
+
+sudo install -m 0755 -d /etc/apt/keyrings
+
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+-o /etc/apt/keyrings/docker.asc
+
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+https://download.docker.com/linux/ubuntu \
+$(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+### Install Docker Engine
+
+```bash
+sudo apt update
+
+sudo apt install -y \
+docker-ce \
+docker-ce-cli \
+containerd.io \
+docker-buildx-plugin \
+docker-compose-plugin
+```
+
+### Enable Docker
+
+```bash
+sudo systemctl enable --now docker
+```
+
+### Verify Installation
+
+```bash
+sudo docker run hello-world
+```
+
+Expected output:
+
+```text
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+```
+
+### Enable Non-Root Docker Usage
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+Apply the group change.
+
+```bash
+exit
+```
+
+Re-open the WSL terminal and verify.
+
+```bash
+docker run hello-world
+docker run -it ubuntu bash
+```
+
+
 インストール後、動作確認。
 
 ```bash
